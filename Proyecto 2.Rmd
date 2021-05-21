@@ -39,7 +39,7 @@ load("beats.RData")
 
 Una vez cargados los datos, es necesario realizar una limpieza de estos, para así poder realizar el posterior análisis de mejor manera y sin errores en los procesos de clustering debido a datos faltantes por ejemplo. Y también para poder reducir el tamaño de la base de datos, ya que se necesita un computador con una gran capacidad de procesamiento para trabajar con aproximadamente 500.000 datos.
 
-Así, lo primero corresponde a escoger solo aquellas columnas que sean relevantes para el caso de estudio, las que en este caso son aquellas que nos entregan información respecto de parametros de las canciones, desde que tan energéticas son, hasta aquelas que si se encuentran siendo grabadas con público, de esta manera podremos generar clusters y lograr crear la playlist que es de nuestro interés:
+Así, lo primero corresponde a escoger solo aquellas columnas que sean relevantes para el caso de estudio, las que en este caso son aquellas que nos entregan información respecto de parametros de las canciones, desde que tan energéticas son, hasta aquelas que si se encuentran siendo grabadas con público, de esta manera podremos generar clusters y lograr crear la playlist que es de nuestro interés, que basicamente son todas las variables que nos entregan información respecto de las canciones, según la API de spotify, que el profesor nos dió para guiarnos.
         Danceability
         Energy
         Key
@@ -323,6 +323,8 @@ Es importante señalar que un requisito de este trabajo es que la playlist tenga
 
 Para esto lo que se realiza, es agregar la cancion que tenemos como referencia a nuestra playlist, además de su duración. De esta manera programamos un contador que empiece en la duración de la cancion que escogimos. Luego por medio de un ciclo while se procede a agregar canciones de manera random a la playlist. En caso que esta ya esta agregada no se agregara denuevo, esto por medio de un condicional if.
 
+Luego se unen las diferentes filas de esta playlist, para luego ser presentadas al usuario interesado.
+
 ```{r playlist}
 cancion2 <- cluster %>% filter(cluster$track_id == cancion$track_id)
 Playlist <- NULL
@@ -343,9 +345,15 @@ while (c_time <= tiempoMax) {
 }
 ```
 
+## Resultado
+
 Finalmente el último paso, es mostrar las canciones para el usuario. Es importante señalar que para que sea amigable, se mostraran los nombres de las canciones y su artista.
 
 ```{r print playlist}
 PlaylistPrint <- Playlist %>% select(c("track_name", "artist_name"))
 head(as.matrix.data.frame(PlaylistPrint), nrow(PlaylistPrint))
+print(c_time)
 ```
+Adicionalmente, se imprime la duracion de esta excede en una muy pequeña parte, de hecho para ser exactos en 18 segundos. Por ende, concluimos queeste es un resultado aceptable.
+
+De esta manera obtenemos la playlist asociada a nuestro proyecto.
