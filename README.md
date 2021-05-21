@@ -1,13 +1,12 @@
 Proyecto 2
 ================
 
-# Proyecto 2
-
 Para este proyecto se debe crear una playlist, la cuál debe tener una
 duración de 3 horas. La playlist que se creara estará orientada para el
-momento en que uno esta haciendo un viaje largo en la carretera. Por
-ende, esta playlist será variada, para poder ayudar en la motivación,
-pasar un buen rato y también tener la oportunidad de pensar.
+momento en que uno esta haciendo un viaje largo en la carretera, ya sea
+en auto o en bus. Por ende, esta playlist será variada, para poder
+ayudar en la motivación, pasar un buen rato, para pensar y para que el
+usuario pueda cantar si es su deseo.
 
 Para esto se generarán clusters con las canciones de la base de datos;
 es importante señalar que se trabajará con una muestra de 10.000
@@ -15,13 +14,13 @@ observaciones, esto es debido a que al ser tan grande la base original,
 existen complicaciones para algunos computadores al momento de realizar
 los diferentes análisis que son necesarios. Es necesario recalcar que
 como se trabajará con una muestra de la base original se debe verificar
-que esta sea representativa de la orginal para esto se calcularan las
-medias y desviaciones, para buscar que las variaciones sean muy
+que esta sea representativa. Para esto se calcularan las medias y
+desviaciones estándares, y se busca que las variaciones sean muy
 pequeñas. De esta manera se tendrá una muestra representativa de los
-datos.
+datos originales.
 
 Es importante mencionar que se realizará también una limpieza de la
-data. Esto con elobjetivo de poder retirar tanto elementos que esten
+data. Esto con el objetivo de poder retirar tanto elementos que esten
 repetidos, como canciones, y también retirar elementos que no hayan sido
 consignados. Así podremos reducir el tamaño de nuestra base de datos,
 para el momento de generar la muestra.
@@ -97,34 +96,54 @@ load("beats.RData")
 ### Selección de variables de interés
 
 Una vez cargados los datos, es necesario realizar una limpieza de estos,
-para así poder realizar el posterior análisis de mejor manera y sin
+para así poder realizar el posterior análisis de mejor manera, y sin
 errores en los procesos de clustering debido a datos faltantes por
 ejemplo. Y también para poder reducir el tamaño de la base de datos, ya
 que se necesita un computador con una gran capacidad de procesamiento
 para trabajar con aproximadamente 500.000 datos.
 
 Así, lo primero corresponde a escoger solo aquellas columnas que sean
-relevantes para el caso de estudio, las que en este caso son aquellas
-que nos entregan información respecto de parametros de las canciones,
-desde que tan energéticas son, hasta aquelas que si se encuentran siendo
-grabadas con público, de esta manera podremos generar clusters y lograr
-crear la playlist que es de nuestro interés, que basicamente son todas
-las variables que nos entregan información respecto de las canciones,
-según la API de spotify, que el profesor nos dió para guiarnos.
-Danceability Energy Key Loudness  
-Mode Speechiness Acousticness Instrumentalness Liveness Valence Tempo
+relevantes para el caso de estudio. En este caso, son aquellas que nos
+entregan información respecto de parametros de las canciones, desde que
+tan energéticas son, hasta aquelas que si se encuentran siendo grabadas
+con público, de esta manera podremos generar clusters y lograr crear la
+playlist que es de nuestro interés, que basicamente son todas las
+variables que nos entregan información respecto de las canciones, según
+la API de spotify, que el profesor nos dió para guiarnos. Estas
+variables son:
 
-Además, también se deben conservar las columnas “track\_id” para poder
+Danceability
+
+Energy
+
+Key
+
+Loudness
+
+Mode
+
+Speechiness
+
+Acousticness
+
+Instrumentalness
+
+Liveness
+
+Valence
+
+Tempo
+
+Además, se deben conservar las columnas “track\_id” para poder
 identificar la canción en spotify, “duration\_ms” para luego determinar
 el largo de la playlists a crear y que de esta manera cumpla con el
-requisito de duración, el cual es de 3 horas. Finalmente “track\_name” y
-“artist\_name”, para poder entregar una playlist que tenga sentido, ya
-que es de esperar que la persona que escuche la playlist desee poder
-además de saber el nombre de la canción, quiera conocer al artista para
-quizás explorar más respecto de este. Estas columnas serán guardadas en
-una nueva tabla que tendra por nombre mus1, luego se muestra un resumen
-de este y se muestra el número de filas. Percatandonos que tenemos
-447.622 observaciones.
+requisito de duración. Finalmente “track\_name” y “artist\_name”, para
+poder entregar una playlist que tenga sentido, ya que es de esperar que
+la persona que escuche la playlist desee poder además de saber el nombre
+de la canción, quiera conocer al artista para quizás explorar más
+respecto de este. Estas columnas serán guardadas en una nueva tabla que
+tendra por nombre mus1, luego se muestra un resumen de este y se muestra
+el número de filas. Percatandonos que tenemos 447.622 observaciones.
 
 ``` r
 mus1 <- beats[, c(1,8:19, 23, 27)]
@@ -198,10 +217,10 @@ nrow(mus1) - nrow(mus_uni)
     ## [1] 2525
 
 Esto nos da como resultado que fueron eliminadas 2.525 canciones que se
-encontraban duplicadas. Luego se procede a revisar si es que no existen
-algun dato que se encuentre duplicado. Y aquí podemos corroborar que no
-tenemos datos NA. Lo cual es bueno porque no nos causará problemas en
-los próximos análisis.
+encontraban duplicadas. Luego se procede a revisar si no existe algun
+dato que se encuentre omitido Y aquí podemos corroborar que no tenemos
+datos NA. Lo cual es bueno porque no nos causará problemas en los
+próximos análisis.
 
 ``` r
 summary(mus_uni)
@@ -242,10 +261,12 @@ Podemos ver en el resumen de mus\_uni, que existen diversos tipos de
 datos. Por este motivo procederemos a unficarlos tanto en double (para
 los que son numéricos) y character para aquellos que sean palabras, de
 esta manera no tendremos inconvenientes por el tipo de dato al realizar
-los análisis. Primero se procedera a convertir las variables numericas a
-character para luego pasarlas a double, de esta manera evitaremos
-cualquier inconveniente que pudiese surgir producto de esto. (Según lo
-que se nos explico en una ayudantía)
+los análisis.
+
+Primero se procedera a convertir las variables numericas a character
+para luego pasarlas a double, de esta manera evitaremos cualquier
+inconveniente que pudiese surgir producto de esto. (Según lo que se nos
+explico en una ayudantía)
 
 ``` r
 mus_uni$danceability <- as.double(as.character(mus_uni$danceability))
@@ -264,7 +285,7 @@ mus_uni$duration_ms <- as.double(as.character(mus_uni$duration_ms))
 
 Asimismo, realizamos este procedimiento para las varibales que son de
 tipo character para volver a convertirlas, en el mismo tipo de dato, que
-es cahracter. Y luego se realiza un summary para verificar que no haya
+es character. Y luego se realiza un summary para verificar que no haya
 quedado alguna variable NA, luego de realizar las conversiones de tipo
 de datos.
 
@@ -310,11 +331,12 @@ El siguiente paso es uno sumamente importante, el cual consiste en
 generar una muestra aleatoria apartir de la base general de mus\_uni.
 Esto se hace debido a que la cantidad de datos es suamamente grande, por
 ende, es mejor utilizar una muestra que sea más pequeña, pero que sea
-representativa de la base de datos original. Para esto se calcularan las
-media y desviaciones estándar de cada variable y luego se hará lo mismo
-para la muestra. De esta manera buscaremos que los valores para las
-medias y desviaciones, sean lo mas similares posibles entre las dos
-muestras.
+representativa de la base de datos original.
+
+Para esto se calcularan las media y desviaciones estándar de cada
+variable y luego se hará lo mismo para la muestra. De esta manera
+buscaremos que los valores para las medias y desviaciones, sean lo mas
+similares posibles entre las dos muestras.
 
 ``` r
 set.seed(1000)
@@ -459,7 +481,9 @@ mus_scale <- data.frame(sapply(songs_num, scale))
 ```
 
 A continuación se procede a revisar que la data escalada no tenga
-valores que sean NA. En caso de existir, estos son retirados.
+valores que sean NA, ya que como se hizo este proceso quizás algún dato
+fue emitido. Seria extraño, pero no esta nunca de más revisar. En caso
+de existir, estos son retirados.
 
 ``` r
 summary(mus_scale)
@@ -487,6 +511,9 @@ summary(mus_scale)
     ##  3rd Qu.: 0.1372   3rd Qu.: 0.7251   3rd Qu.: 0.69522   3rd Qu.: 0.2356  
     ##  Max.   : 3.4835   Max.   : 2.3685   Max.   : 4.00362   Max.   :23.6156
 
+Se aprecia que no existen datos NA, por ende se prosigue con el analisis
+por medio de clusters.
+
 # Procesamiento de los Datos
 
 ## Análisis de Clusters
@@ -497,9 +524,9 @@ Como ya tenemos nuestra data muestral, escalada y sin presencia de datos
 NA, podemos comenzar con el proceso de análisis de clusters.
 Comenzaremos con K means, buscando que hayan 10 clusters, para luego ir
 variando estos resultados acorde a lo que se vaya descubriendo. En este
-paso se clona la variable de mus\_scale, para que no modifique a la
-original, y de esta manera si en el futuro necesitamos usar la original,
-no tengamos algun inconveniente. Por eso, se crea la variable
+paso se clona la variable de la dara escalada, para que no modifique a
+la original, y de esta manera si en el futuro necesitamos usar la
+original, no tengamos algun inconveniente. Por eso, se crea la variable
 mus\_scale10.
 
 ``` r
@@ -558,12 +585,14 @@ De este modelo podemos ver el valor de K ideal sería de 2, pero esto
 seria erróneo y contraproducente hacerlo, ya que si para el valor de 10,
 los datos estaban desordenados, para el valor de 2 será aún mayor el
 desorden, ya que los datos estarían en dos clusters. Se procede a
-mostrar esto gráficamente. Para un valor de K=2. Finalmente, se toma
-como una idea, el intentar aplicar metodos de clusterización sobre el
-primer cluster generado al utilizar k = 2. En este paso se clona la
-variable de mus\_scale, para que no modifique a la original, y de esta
-manera si en el futuro necesitamos usar la original, no tengamos algun
-inconveniente. Por eso, se crea la variable mus\_scale2.
+mostrar esto gráficamente. Para un valor de K=2.
+
+Finalmente, se toma como una idea, el intentar aplicar metodos de
+clusterización sobre el primer cluster generado al utilizar k = 2. En
+este paso se clona la variable de la data escalada, para que no
+modifique a la original, y de esta manera si en el futuro necesitamos
+usar la original, no tengamos algun inconveniente. Por eso, se crea la
+variable mus\_scale2.
 
 ``` r
 kmeans2 = kmeans(mus_scale, centers = 2)
@@ -593,7 +622,9 @@ ggplot(mus_scale2, aes(loudness, instrumentalness, color=clus)) +
 ![](Proyecto-2_files/figure-gfm/kmeans%202%20clusters-3.png)<!-- -->
 
 Al observar esto, se procede a analizar los datos pertenecientes al
-primer cluster generado por el modelo al primer cluster.
+primer cluster generado por el modelo al usar un k = 2. Esto será por
+medio de cluster probabilístocs, ya que de esta manera quizás se logre
+un mejor resultado.
 
 ``` r
 clu1_k2 <- mus_scale2 %>% filter(mus_scale2$clus == 1)
@@ -635,9 +666,11 @@ Dados los problemas presentados al intentar encontrar un valor para K
 ideal, se procede a analizar por medio de cluster probabilísticos al
 primer cluster que se genero al usar el valor de k = 2. Ya que de esta
 manera podremos lograr encontrar cluster que sigan una distribución
-prababilistica. Para esto el modelo intenta optimizar los valores de mu
-y k, para las conformación de estos clusters. (Según lo visto en clases)
-Además, este se realizará sobre el primer cluster de K=2.
+prababilistica.
+
+Para esto el modelo intenta optimizar los valores de mu y k, para las
+conformación de estos clusters. (Según lo visto en clases) Además, este
+se realizará sobre el primer cluster de K=2.
 
 Para esto se utilizará el modelo de kmeans GMM (Gaussiano Multivariado),
 ya que tiene un parecido con el kmeans.
@@ -673,8 +706,8 @@ esta manera generar los clusters necesarios.
 
 ## Proceso Invertido de Clusterización
 
-Una manera que se puede intentar obtener el numero ideal de k, es por
-medio de empezar realizando primero cluster probabilisticos, y luego
+Una manera que se puede intentar para obtener el numero ideal de k, es
+por medio de empezar realizando primero cluster probabilisticos, y luego
 cuando se tenga esta distribución se procede a ralizar kmeans. De esta
 manera se podría tener quizás un mayor orden, y de esta manera
 determinar cual es el k ideal para poder generar los clusters.
@@ -711,7 +744,9 @@ Este gráfico si permite diferenciar a una escala muy baja que existe una
 cierta tendencia de clusters, pero desafortunadamente aún no es posible
 distinguir algún valor para poder asignarle a k, ya que al aplicar la
 función de resumen, no es posible aún identificar este valor que nos
-encontramos buscando.
+encontramos buscando. Se aprecia que el modelo indica que los clusters a
+generar debiesen ser 8. Esto se tendrá en consideración para la elección
+del k final
 
 Lo siguiente que se debe hacer es juntar la muestra aleatoria de los
 datos junto con el cluster al que esta asignado cada canción, para de
@@ -728,10 +763,40 @@ una de Yandel, que se llama Explicale.
 
 ``` r
 cancion <- mus_muest_clu[123,]
+summary(cancion)
 ```
 
+    ##  artist_name         danceability       energy          key       loudness     
+    ##  Length:1           Min.   :0.808   Min.   :0.69   Min.   :1   Min.   :-4.151  
+    ##  Class :character   1st Qu.:0.808   1st Qu.:0.69   1st Qu.:1   1st Qu.:-4.151  
+    ##  Mode  :character   Median :0.808   Median :0.69   Median :1   Median :-4.151  
+    ##                     Mean   :0.808   Mean   :0.69   Mean   :1   Mean   :-4.151  
+    ##                     3rd Qu.:0.808   3rd Qu.:0.69   3rd Qu.:1   3rd Qu.:-4.151  
+    ##                     Max.   :0.808   Max.   :0.69   Max.   :1   Max.   :-4.151  
+    ##       mode    speechiness     acousticness    instrumentalness    liveness    
+    ##  Min.   :1   Min.   :0.148   Min.   :0.0583   Min.   :0        Min.   :0.103  
+    ##  1st Qu.:1   1st Qu.:0.148   1st Qu.:0.0583   1st Qu.:0        1st Qu.:0.103  
+    ##  Median :1   Median :0.148   Median :0.0583   Median :0        Median :0.103  
+    ##  Mean   :1   Mean   :0.148   Mean   :0.0583   Mean   :0        Mean   :0.103  
+    ##  3rd Qu.:1   3rd Qu.:0.148   3rd Qu.:0.0583   3rd Qu.:0        3rd Qu.:0.103  
+    ##  Max.   :1   Max.   :0.148   Max.   :0.0583   Max.   :0        Max.   :0.103  
+    ##     valence         tempo         track_id          duration_ms    
+    ##  Min.   :0.64   Min.   :125.1   Length:1           Min.   :223146  
+    ##  1st Qu.:0.64   1st Qu.:125.1   Class :character   1st Qu.:223146  
+    ##  Median :0.64   Median :125.1   Mode  :character   Median :223146  
+    ##  Mean   :0.64   Mean   :125.1                      Mean   :223146  
+    ##  3rd Qu.:0.64   3rd Qu.:125.1                      3rd Qu.:223146  
+    ##  Max.   :0.64   Max.   :125.1                      Max.   :223146  
+    ##   track_name              cl   
+    ##  Length:1           Min.   :5  
+    ##  Class :character   1st Qu.:5  
+    ##  Mode  :character   Median :5  
+    ##                     Mean   :5  
+    ##                     3rd Qu.:5  
+    ##                     Max.   :5
+
 Aqui procedemos a identifcar en que cluster se encuentra esta canción. Y
-podemos ver que esta en el cluster número 7
+podemos ver que esta en el cluster número 5
 
 ``` r
 cluster <- mus_muest_clu %>% filter(mus_muest_clu$cl == cancion$cl)
@@ -806,7 +871,7 @@ plot(kmeansSumaCuadradoscluster)
 De esta manera se reafirma la posición de realizar el análisis de
 kmeans, con un k = 5. Para la canción que se escogió más arriba. Por
 esto se hace el modelo, y despues se esto se procede con el momento de
-filtrar las canciones acorde a su duracion.
+filtrar las canciones acorde a su cluster.
 
 ``` r
 modeloKmeansCluster <- kmeans(clu_num, centers = 5)
