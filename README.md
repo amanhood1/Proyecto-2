@@ -1,6 +1,8 @@
 Proyecto 2
 ================
 
+# Alumnos: Aejandro Manhood y Estivaliz Rosales
+
 Para este proyecto se debe crear una playlist, la cuál debe tener una
 duración de 3 horas. La playlist que se creara estará orientada para el
 momento en que uno esta haciendo un viaje largo en la carretera, ya sea
